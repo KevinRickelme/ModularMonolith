@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common.Application\Common.Application.csproj" />
+    <ProjectReference Include="..\EmpresaFuncionario.Domain\EmpresasFuncionarios.Domain.csproj" />
+    <ProjectReference Include="..\Empresas.Application\Empresas.Application.csproj" />
+    <ProjectReference Include="..\Empresas.Domain\Empresas.Domain.csproj" />
+    <ProjectReference Include="..\Funcionarios.Application\Funcionarios.Application.csproj" />
+  </ItemGroup>
+
+</Project>

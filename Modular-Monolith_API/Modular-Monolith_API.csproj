@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Modular_Monolith_API</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\EmpresaFuncionario.Application\EmpresasFuncionarios.Application.csproj" />
+	  <ProjectReference Include="..\EmpresaFuncionario.Infra.Data\EmpresasFuncionarios.Infra.Data.csproj" />
+	  <ProjectReference Include="..\EmpresaFuncionario.Infra.InversionOfControl\EmpresasFuncionarios.Infra.InversionOfControl.csproj" />
+	  <ProjectReference Include="..\Funcionarios.Application\Funcionarios.Application.csproj" />
+	  <ProjectReference Include="..\Funcionarios.Infra.Data\Funcionarios.Infra.Data.csproj" />
+	  <ProjectReference Include="..\Funcionarios.Infra.InversionOfControl\Funcionarios.Infra.InversionOfControl.csproj" />
+
+	  <ProjectReference Include="..\Empresas.Application\Empresas.Application.csproj" />
+	  <ProjectReference Include="..\Empresas.Infra.Data\Empresas.Infra.Data.csproj" />
+	  <ProjectReference Include="..\Empresas.Infra.InversionOfControl\Empresas.Infra.InversionOfControl.csproj" />
+  </ItemGroup>
+
+</Project>

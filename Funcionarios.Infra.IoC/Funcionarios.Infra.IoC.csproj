@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Funcionarios.Application\Funcionarios.Application.csproj" />
+    <ProjectReference Include="..\Funcionarios.Domain\Funcionarios.Domain.csproj" />
+    <ProjectReference Include="..\Funcionarios.Infra.Data\Funcionarios.Infra.Data.csproj" />
+    <ProjectReference Include="..\Modular-Monolith_API\Modular-Monolith_API.csproj" />
+    <ProjectReference Include="..\SharedKernel\SharedKernel.csproj" />
+  </ItemGroup>
+
+</Project>
