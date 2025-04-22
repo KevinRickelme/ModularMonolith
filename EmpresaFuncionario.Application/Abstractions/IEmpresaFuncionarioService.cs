@@ -1,9 +1,4 @@
 ﻿using Common.Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EmpresasFuncionarios.Application.Abstractions
 {
@@ -11,5 +6,11 @@ namespace EmpresasFuncionarios.Application.Abstractions
     {
         Task<bool> RemoveAsync(Guid Id, CancellationToken cancellationToken);
         Task<EmpresaFuncionarioDTO?> UpdateAsync(EmpresaFuncionarioDTO empresaFuncionario, CancellationToken cancellationToken);
+        Task<Guid> AddAsync(EmpresaFuncionarioDTO empresaFuncionario, CancellationToken cancellationToken);
+        Task<EmpresaFuncionarioDTO?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<EmpresaFuncionarioDTO?> GetByFuncionarioIdAndEmpresaIdAsync(Guid funcionarioId, Guid empresaId, CancellationToken cancellationToken);
+        Task<IEnumerable<EmpresaFuncionarioDTO>> GetByFuncionarioIdAsync(Guid Id, CancellationToken cancellationToken);
+        Task<IEnumerable<EmpresaFuncionarioDTO>> GetByEmpresaIdAsync(Guid Id, CancellationToken cancellationToken);
+
     }
 }

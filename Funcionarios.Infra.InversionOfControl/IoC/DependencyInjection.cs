@@ -1,4 +1,5 @@
-﻿using Funcionarios.Application.Mappings;
+﻿using FluentValidation;
+using Funcionarios.Application.Mappings;
 using Funcionarios.Infraestructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,7 @@ namespace Funcionarios.Infra.InversionOfControl.IoC
                           .AsImplementedInterfaces()
                           .WithScopedLifetime());
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            services.AddValidatorsFromAssembly(Application.AssemblyReferences.AssemblyReference.Assembly, includeInternalTypes: true); 
             return services;
         }
     }

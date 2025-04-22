@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace EmpresasFuncionarios.Infra.InversionOfControl.IoC
 {
@@ -36,6 +37,7 @@ namespace EmpresasFuncionarios.Infra.InversionOfControl.IoC
                           .AsImplementedInterfaces()
                           .WithScopedLifetime());
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            services.AddValidatorsFromAssembly(Application.AssemblyReferences.AssemblyReference.Assembly, includeInternalTypes: true); 
             return services;
         }
     }

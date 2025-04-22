@@ -11,10 +11,9 @@ using System.Threading.Tasks;
 
 namespace Empresas.Application.Command.Remove
 {
-    public class RemoveEmpresaCommandHandler(IEmpresaService empresaService, IEmpresaRepository empresaRepository) : ICommandHandler<RemoveEmpresaCommand, bool>
+    public class RemoveEmpresaCommandHandler(IEmpresaService empresaService) : ICommandHandler<RemoveEmpresaCommand, bool>
     {
         private readonly IEmpresaService _empresaService = empresaService;
-        private readonly IEmpresaRepository _empresaRepository = empresaRepository;
         public async Task<Result<bool>> Handle(RemoveEmpresaCommand request, CancellationToken cancellationToken)
         {
             if (request.Id == Guid.Empty)
@@ -22,7 +21,8 @@ namespace Empresas.Application.Command.Remove
                 return Result.Failure<bool>(EmpresaErrors.NotFound(request.Id));
             }
 
-            var empresa = await _empresaRepository.GetByIdAsync(request.Id, cancellationToken);
+            var empresa = await _empresaService.GetByIdAsync(request.Id, cancellationToken);
+            
             if (empresa == null) {
                 return Result.Failure<bool>(EmpresaErrors.NotFound(request.Id));
             }

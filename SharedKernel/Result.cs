@@ -17,11 +17,25 @@ public class Result
         Error = error;
     }
 
+    public Result(bool isSuccess, IDictionary<string, string[]> erros)
+    {
+        if (isSuccess && erros != null ||
+            !isSuccess && erros == null)
+        {
+            throw new ArgumentException("Invalid error", nameof(erros));
+        }
+        IsSuccess = isSuccess;
+        Errors = erros;
+    }
+
+
     public bool IsSuccess { get; }
 
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; }
+
+    public IDictionary<string, string[]>? Errors { get; set; }
 
     public static Result Success() => new(true, Error.None);
 
@@ -32,6 +46,9 @@ public class Result
 
     public static Result<TValue> Failure<TValue>(Error error) =>
         new(default, false, error);
+
+    public static Result Failure(IDictionary<string, string[]> errors) => new(false, errors);
+    public static Result<TValue> Failure<TValue>(IDictionary<string, string[]> errors) => new(default, false, errors);
 }
 
 public class Result<TValue> : Result
@@ -42,6 +59,18 @@ public class Result<TValue> : Result
         : base(isSuccess, error)
     {
         _value = value;
+    }
+
+    public Result(TValue? value, bool isSuccess, IDictionary<string, string[]> erros)
+        : base(isSuccess, erros)
+    {
+        _value = value;
+        if (isSuccess && erros != null ||
+            !isSuccess && erros == null)
+        {
+            throw new ArgumentException("Invalid error", nameof(erros));
+        }
+        Errors = erros;
     }
 
     [NotNull]

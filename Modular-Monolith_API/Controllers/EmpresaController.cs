@@ -1,9 +1,11 @@
-﻿using Empresas.Application.Command.Add;
+﻿using Common.Application.DTOs;
+using Empresas.Application.Command.Add;
 using Empresas.Application.Command.Remove;
 using Empresas.Application.Command.Update;
 using Empresas.Application.Query.GetAll;
 using Empresas.Application.Query.GetByCNPJ;
 using Empresas.Application.Query.GetById;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Modular_Monolith_API.ViewModels;
@@ -32,7 +34,10 @@ namespace Modular_Monolith_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(result?.Error);
+                    if(result?.Errors.Count > 1)
+                        return BadRequest(result?.Errors);
+                    else
+                        return BadRequest(result?.Error);
                 }
             }
         }
@@ -53,7 +58,10 @@ namespace Modular_Monolith_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(result?.Error);
+                    if (result?.Errors.Count > 1)
+                        return BadRequest(result?.Errors);
+                    else
+                        return BadRequest(result?.Error);
                 }
             }
         }
@@ -74,7 +82,10 @@ namespace Modular_Monolith_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(result?.Error);
+                    if (result?.Errors.Count > 1)
+                        return BadRequest(result?.Errors);
+                    else
+                        return BadRequest(result?.Error);
                 }
             }
         }
@@ -96,7 +107,10 @@ namespace Modular_Monolith_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(result?.Error);
+                    if (result?.Errors.Count > 1)
+                        return BadRequest(result?.Errors);
+                    else
+                        return BadRequest(result?.Error);
                 }
             }
         }
@@ -117,7 +131,10 @@ namespace Modular_Monolith_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(result?.Error);
+                    if (result?.Errors.Count > 1)
+                        return BadRequest(result?.Errors);
+                    else
+                        return BadRequest(result?.Error);
                 }
             }
         }
@@ -138,7 +155,10 @@ namespace Modular_Monolith_API.Controllers
                 }
                 else
                 {
-                    return BadRequest(result?.Error);
+                    if (result?.Errors.Count > 1)
+                        return BadRequest(result?.Errors);
+                    else
+                        return BadRequest(result?.Error);
                 }
             }
         }

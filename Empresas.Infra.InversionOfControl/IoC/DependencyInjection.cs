@@ -1,5 +1,6 @@
 ﻿using Empresas.Application.Mappings;
 using Empresas.Infra.Data.Context;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,7 @@ namespace Empresas.Infra.InversionOfControl.IoC
                           .AsImplementedInterfaces()
                           .WithScopedLifetime());
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            services.AddValidatorsFromAssembly(Application.AssemblyReferences.AssemblyReference.Assembly, includeInternalTypes: true);
             return services;
         }
     }

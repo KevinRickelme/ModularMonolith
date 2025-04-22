@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Common.Application.Abstractions.Messaging;
 using Common.Application.DTOs;
+using Empresas.Application.Abstractions;
 using Empresas.Domain.Abstractions;
 using SharedKernel;
 using SharedKernel.Errors;
@@ -12,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Empresas.Application.Query.GetById
 {
-    public class GetEmpresaByIdQueryHandler(IEmpresaRepository empresaRepository, IMapper mapper) : IQueryHandler<GetEmpresaByIdQuery, EmpresaDTO>
+    public class GetEmpresaByIdQueryHandler(IEmpresaService empresaService, IMapper mapper) : IQueryHandler<GetEmpresaByIdQuery, EmpresaDTO>
     {
-        private readonly IEmpresaRepository _empresaRepository = empresaRepository;
+        private readonly IEmpresaService _empresaService = empresaService;
         private readonly IMapper _mapper = mapper;
         public async Task<Result<EmpresaDTO>> Handle(GetEmpresaByIdQuery request, CancellationToken cancellationToken)
         {
-            var empresa = await _empresaRepository.GetByIdAsync(request.Id, cancellationToken);
+            var empresa = await _empresaService.GetByIdAsync(request.Id, cancellationToken);
             if (empresa == null)
             {
                 return Result.Failure<EmpresaDTO>(EmpresaErrors.NotFound(request.Id));

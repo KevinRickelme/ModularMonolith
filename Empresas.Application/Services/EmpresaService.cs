@@ -15,6 +15,38 @@ namespace Empresas.Application.Services
     {
         private readonly IEmpresaRepository _empresaRepository = empresaRepository;
         private readonly IMapper _mapper = mapper;
+
+        public Task<Guid> AddAsync(EmpresaDTO empresa, CancellationToken cancellationToken)
+        {
+            var empresaEntity = _mapper.Map<Empresa>(empresa);
+            return _empresaRepository.AddAsync(empresaEntity, cancellationToken);
+        }
+
+        public async Task<IEnumerable<EmpresaDTO>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return  _mapper.Map<IEnumerable<EmpresaDTO>>(await _empresaRepository.GetAllAsync(cancellationToken));
+        }
+
+        public async Task<EmpresaDTO?> GetByCnpjAsync(string cnpj, CancellationToken cancellationToken)
+        {
+            return _mapper.Map<EmpresaDTO>(await _empresaRepository.GetByCnpjAsync(cnpj, cancellationToken));
+        }
+
+        public async Task<EmpresaDTO?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        {
+            return _mapper.Map<EmpresaDTO>(await _empresaRepository.GetByIdAsync(id, cancellationToken));
+        }
+
+        public async Task<IEnumerable<EmpresaDTO>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+        {
+            return _mapper.Map<IEnumerable<EmpresaDTO>>(await _empresaRepository.GetByIdsAsync(ids, cancellationToken));
+        }
+
+        public async Task<EmpresaDTO?> GetByNomeAsync(string nome, CancellationToken cancellationToken)
+        {
+            return _mapper.Map<EmpresaDTO>(await _empresaRepository.GetByNomeAsync(nome, cancellationToken));
+        }
+
         public async Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken)
         {
             var empresa = await _empresaRepository.GetByIdAsync(id, cancellationToken);
