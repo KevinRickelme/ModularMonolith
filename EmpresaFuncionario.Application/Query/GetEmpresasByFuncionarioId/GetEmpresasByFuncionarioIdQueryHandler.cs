@@ -7,10 +7,10 @@ using SharedKernel.Errors;
 
 namespace EmpresasFuncionarios.Application.Query.GetEmpresasByFuncionarioId
 {
-    public class GetEmpresasByFuncionarioIdQueryHandler(IEmpresaConsultaService empresaConsultaService, IEmpresaFuncionarioRepository empresaFuncionarioRepository) : IQueryHandler<GetEmpresasByFuncionarioIdQuery, IEnumerable<EmpresaDTO>>
+    public class GetEmpresasByFuncionarioIdQueryHandler(IEmpresaConsultaService empresaConsultaService, IEmpresaFuncionarioReadRepository empresaFuncionarioRepository) : IQueryHandler<GetEmpresasByFuncionarioIdQuery, IEnumerable<EmpresaDTO>>
     {
         private readonly IEmpresaConsultaService _empresaConsultaService = empresaConsultaService;
-        private readonly IEmpresaFuncionarioRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
+        private readonly IEmpresaFuncionarioReadRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
         public async Task<Result<IEnumerable<EmpresaDTO>>> Handle(GetEmpresasByFuncionarioIdQuery request, CancellationToken cancellationToken)
         {
             var vinculos = await _empresaFuncionarioRepository.GetByFuncionarioIdAsync(request.FuncionarioId, cancellationToken);

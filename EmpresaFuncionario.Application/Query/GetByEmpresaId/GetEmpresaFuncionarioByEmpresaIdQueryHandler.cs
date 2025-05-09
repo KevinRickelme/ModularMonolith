@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace EmpresasFuncionarios.Application.Query.GetByEmpresaId
 {
-    public class GetEmpresaFuncionarioByEmpresaIdQueryHandler(IEmpresaFuncionarioRepository empresaFuncionarioRepository, IMapper mapper) : IQueryHandler<GetEmpresaFuncionarioByEmpresaIdQuery, IEnumerable<EmpresaFuncionarioDTO>>
+    public class GetEmpresaFuncionarioByEmpresaIdQueryHandler(IEmpresaFuncionarioReadRepository empresaFuncionarioRepository, IMapper mapper) : IQueryHandler<GetEmpresaFuncionarioByEmpresaIdQuery, IEnumerable<EmpresaFuncionarioDTO>>
     {
-        private readonly IEmpresaFuncionarioRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
+        private readonly IEmpresaFuncionarioReadRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
         private readonly IMapper _mapper = mapper;
 
         public async Task<Result<IEnumerable<EmpresaFuncionarioDTO>>> Handle(GetEmpresaFuncionarioByEmpresaIdQuery request, CancellationToken cancellationToken)

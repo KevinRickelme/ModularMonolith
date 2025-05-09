@@ -1,7 +1,11 @@
-﻿using System;
+﻿ using EmpresasFuncionarios.Domain.Events;
+using SharedKernel;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace EmpresasFuncionarios.Domain.Entities
@@ -9,42 +13,79 @@ namespace EmpresasFuncionarios.Domain.Entities
     public sealed class EmpresaFuncionario
     {
         public Guid Id { get; private set; }
+        public Guid StreamId { get; private set; }
         public Guid FuncionarioId { get; private set; }
         public Guid EmpresaId { get; private set; }
         public DateTime DataAdmissao { get; private set; }
         public string Cargo { get; private set; }
         public string Departamento { get; private set; }
 
+
+        private readonly List<Event> _eventos = new();
+
         public EmpresaFuncionario()
         {
-            Cargo = string.Empty;
-            Departamento = string.Empty;
-            DataAdmissao = DateTime.MinValue;
+            Cargo = "";
+            Departamento = "";
+        }
+        public EmpresaFuncionario(List<Event> eventos)
+        {
+            Cargo = "";
+            Departamento = "";
+            foreach (var ev in eventos.OrderBy(e => e.Timestamp))
+                Apply(ev);
+        }
+        public void Admitir(Guid empresaFuncionarioId, Guid empresaId, Guid funcionarioId, DateTime dataAdmissao, string cargo, string departamento)
+        {
+            var @event = new FuncionarioAdmitidoEvent(empresaFuncionarioId, funcionarioId, empresaId, dataAdmissao, cargo, departamento);
+
+            Apply(@event);
         }
 
-        public EmpresaFuncionario(Guid funcionarioId, Guid empresaId, DateTime dataAdmissao, string cargo, string departamento)
+        public void AlterarCargo(string novoCargo)
         {
-            ValidateDomain(funcionarioId, empresaId, dataAdmissao, cargo, departamento);
-            Id = Guid.NewGuid();
-            FuncionarioId = funcionarioId;
-            EmpresaId = empresaId;
-            Cargo = cargo;
-            Departamento = departamento;
-            DataAdmissao = dataAdmissao;
+            var @event = new CargoAlteradoEvent(StreamId, novoCargo);
+            Apply(@event);
         }
 
-        private static void ValidateDomain(Guid funcionarioId, Guid empresaId, DateTime dataAdmissao, string cargo, string departamento)
+        public void AlterarDepartamento(string novoDepartamento)
         {
-            if (funcionarioId == Guid.Empty)
-                throw new ArgumentException("Funcionário ID não pode ser vazio.", nameof(funcionarioId));
-            if (empresaId == Guid.Empty)
-                throw new ArgumentException("Empresa ID não pode ser vazio.", nameof(empresaId));
-            if (dataAdmissao == DateTime.MinValue)
-                throw new ArgumentException("Data de admissão não pode ser a data mínima.", nameof(dataAdmissao));
-            if (string.IsNullOrWhiteSpace(cargo))
-                throw new ArgumentException("Cargo não pode ser vazio ou nulo.", nameof(cargo));
-            if (string.IsNullOrWhiteSpace(departamento))
-                throw new ArgumentException("Departamento não pode ser vazio ou nulo.", nameof(departamento));
+            var @event = new DepartamentoAlteradoEvent(StreamId, novoDepartamento);
+            Apply(@event);
+        }
+
+
+        public void Apply(Event @event)
+        {
+
+            switch (@event)
+            {
+                case FuncionarioAdmitidoEvent e:
+                    Id = e.EmpresaFuncionarioId;
+                    FuncionarioId = e.FuncionarioId;
+                    EmpresaId = e.EmpresaId;
+                    DataAdmissao = e.DataAdmissao;
+                    Cargo = e.Cargo;
+                    Departamento = e.Departamento;
+                    break;
+                case CargoAlteradoEvent e:
+                    Cargo = e.NovoCargo;
+                    break;
+                case DepartamentoAlteradoEvent e:
+                    Departamento = e.NovoDepartamento;
+                    break;
+                default:
+                    throw new ArgumentException("Evento desconhecido.");
+            }
+
+            _eventos.Add(@event);
+        }
+
+        public static EmpresaFuncionario ReplayEvents(List<Event> eventos)
+        {
+            var empresaFuncionario = new EmpresaFuncionario(eventos);
+            return empresaFuncionario;
+
         }
     }
 }

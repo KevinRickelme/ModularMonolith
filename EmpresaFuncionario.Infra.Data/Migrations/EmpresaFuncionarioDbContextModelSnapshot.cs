@@ -47,9 +47,36 @@ namespace EmpresasFuncionarios.Infra.Data.Migrations
                     b.Property<Guid>("FuncionarioId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("StreamId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.ToTable("EmpresasFuncionarios");
+                });
+
+            modelBuilder.Entity("EmpresasFuncionarios.Domain.Entities.EmpresaFuncionarioEvent", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Dados")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("StreamId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TipoEvento")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventosEmpresaFuncionario");
                 });
 #pragma warning restore 612, 618
         }

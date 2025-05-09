@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace EmpresasFuncionarios.Application.Command.Add
+namespace EmpresasFuncionarios.Application.Command.FuncionarioAdmitido
 {
-    public sealed record AddEmpresaFuncionarioCommand(Guid FuncionarioId,
+    public sealed record FuncionarioAdmitidoCommand(Guid FuncionarioId,
             Guid EmpresaId,
             DateTime DataAdmissao,
             string Cargo,

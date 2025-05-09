@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EmpresasFuncionarios.Domain.Abstractions
 {
-    public interface IEmpresaFuncionarioRepository
+    public interface IEmpresaFuncionarioReadRepository
     {
         Task<Guid> AddAsync(EmpresaFuncionario empresaFuncionario, CancellationToken cancellationToken);
         Task<bool> UpdateAsync(EmpresaFuncionario empresaFuncionario, CancellationToken cancellationToken);
@@ -16,5 +16,7 @@ namespace EmpresasFuncionarios.Domain.Abstractions
         Task<EmpresaFuncionario?> GetByFuncionarioIdAndEmpresaIdAsync(Guid funcionarioId, Guid empresaId, CancellationToken cancellationToken);
         Task<IEnumerable<EmpresaFuncionario>> GetByFuncionarioIdAsync(Guid Id, CancellationToken cancellationToken);
         Task<IEnumerable<EmpresaFuncionario>> GetByEmpresaIdAsync(Guid Id, CancellationToken cancellationToken);
+        Task<EmpresaFuncionario> GetByStreamIdAsync(Guid streamId, CancellationToken cancellationToken);
+        Task<List<EmpresaFuncionario>> GetAllAsync(CancellationToken cancellationToken);
     }
 }

@@ -8,6 +8,7 @@ namespace Common.Application.DTOs
 {
     public sealed record EmpresaFuncionarioDTO(
             Guid Id,
+            Guid StreamId,
             Guid FuncionarioId,
             Guid EmpresaId,
             DateTime DataAdmissao,

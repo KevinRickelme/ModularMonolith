@@ -8,18 +8,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace EmpresasFuncionarios.Application.Services
 {
-    public class EmpresaFuncionarioService(IEmpresaFuncionarioRepository empresaFuncionarioRepository, IMapper mapper) : IEmpresaFuncionarioService
+    public class EmpresaFuncionarioReadModelService(IEmpresaFuncionarioReadRepository empresaFuncionarioRepository, IMapper mapper) : IEmpresaFuncionarioReadModelService
     {
-        private readonly IEmpresaFuncionarioRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
+        private readonly IEmpresaFuncionarioReadRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
+
         private readonly IMapper _mapper = mapper;
 
         public async Task<Guid> AddAsync(EmpresaFuncionarioDTO empresaFuncionario, CancellationToken cancellationToken)
         {
             return await _empresaFuncionarioRepository.AddAsync(_mapper.Map<EmpresaFuncionario>(empresaFuncionario), cancellationToken);
+        }
+
+        public async Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken)
+        {
+            var empresaFuncionario = await _empresaFuncionarioRepository.GetByIdAsync(id, cancellationToken);
+            if (empresaFuncionario == null)
+            {
+                return await Task.FromResult(false);
+            }
+            return await _empresaFuncionarioRepository.RemoveAsync(empresaFuncionario, cancellationToken);
+        }
+
+        public async Task<EmpresaFuncionarioDTO?> UpdateAsync(EmpresaFuncionarioDTO empresaFuncionario, CancellationToken cancellationToken)
+        {
+            var empresaEntity = _mapper.Map<EmpresaFuncionario>(empresaFuncionario);
+            bool sucesso = await _empresaFuncionarioRepository.UpdateAsync(empresaEntity, cancellationToken);
+            if (!sucesso)
+            {
+                return null;
+            }
+            return empresaFuncionario;
         }
 
         public async Task<IEnumerable<EmpresaFuncionarioDTO>> GetByEmpresaIdAsync(Guid Id, CancellationToken cancellationToken)
@@ -42,25 +65,9 @@ namespace EmpresasFuncionarios.Application.Services
             return _mapper.Map<EmpresaFuncionarioDTO>(await _empresaFuncionarioRepository.GetByIdAsync(id, cancellationToken));
         }
 
-        public async Task<bool> RemoveAsync(Guid id, CancellationToken cancellationToken)
+        public async Task<EmpresaFuncionarioDTO> GetByStreamIdAsync(Guid streamId, CancellationToken cancellationToken)
         {
-            var empresaFuncionario = await _empresaFuncionarioRepository.GetByIdAsync(id, cancellationToken);
-            if (empresaFuncionario == null)
-            {
-                return await Task.FromResult(false);
-            }
-            return await _empresaFuncionarioRepository.RemoveAsync(empresaFuncionario, cancellationToken);
-        }
-
-        public async Task<EmpresaFuncionarioDTO?> UpdateAsync(EmpresaFuncionarioDTO empresaFuncionario, CancellationToken cancellationToken)
-        {
-            var empresaEntity = _mapper.Map<EmpresaFuncionario>(empresaFuncionario);
-            bool sucesso = await _empresaFuncionarioRepository.UpdateAsync(empresaEntity, cancellationToken);
-            if (!sucesso)
-            {
-                return null;
-            }
-            return empresaFuncionario;
+            return _mapper.Map<EmpresaFuncionarioDTO>(await _empresaFuncionarioRepository.GetByStreamIdAsync(streamId, cancellationToken));
         }
     }
 }

@@ -13,7 +13,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.Application\Common.Application.csproj" />
+    <ProjectReference Include="..\Common.Infra.Data\Common.Infra.Data.csproj" />
     <ProjectReference Include="..\EmpresaFuncionario.Domain\EmpresasFuncionarios.Domain.csproj" />
+    <ProjectReference Include="..\EmpresaFuncionario.Infra.Data\EmpresasFuncionarios.Infra.Data.csproj" />
     <ProjectReference Include="..\Empresas.Application\Empresas.Application.csproj" />
     <ProjectReference Include="..\Empresas.Domain\Empresas.Domain.csproj" />
     <ProjectReference Include="..\Funcionarios.Application\Funcionarios.Application.csproj" />

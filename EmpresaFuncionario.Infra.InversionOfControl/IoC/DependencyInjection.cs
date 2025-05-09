@@ -2,12 +2,6 @@
 using EmpresasFuncionarios.Infra.Data.Context;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Design;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 
@@ -32,11 +26,12 @@ namespace EmpresasFuncionarios.Infra.InversionOfControl.IoC
                                         !type.IsAbstract &&
                                         !type.Name.EndsWith("Command") &&
                                         !type.Name.EndsWith("Query") &&
-                                        !type.Name.EndsWith("DTO")
-                                        ))
+                                        !type.Name.EndsWith("DTO") &&
+                                        !type.Name.EndsWith("Event")))
                           .AsImplementedInterfaces()
                           .WithScopedLifetime());
             services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+            
             services.AddValidatorsFromAssembly(Application.AssemblyReferences.AssemblyReference.Assembly, includeInternalTypes: true); 
             return services;
         }

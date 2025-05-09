@@ -1,12 +1,14 @@
-﻿using EmpresasFuncionarios.Application.Command.Add;
+﻿using EmpresasFuncionarios.Application.Command.CargoAlterado;
 using EmpresasFuncionarios.Application.Command.Delete;
-using EmpresasFuncionarios.Application.Command.Update;
+using EmpresasFuncionarios.Application.Command.DepartamentoAlterado;
+using EmpresasFuncionarios.Application.Command.FuncionarioAdmitido;
 using EmpresasFuncionarios.Application.Query.GetByEmpresaId;
 using EmpresasFuncionarios.Application.Query.GetByFuncionarioAndEmpresaId;
 using EmpresasFuncionarios.Application.Query.GetByFuncionarioId;
 using EmpresasFuncionarios.Application.Query.GetById;
 using EmpresasFuncionarios.Application.Query.GetEmpresasByFuncionarioId;
 using EmpresasFuncionarios.Application.Query.GetFuncionariosByEmpresaId;
+using EmpresasFuncionarios.Domain.Events;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Modular_Monolith_API.ViewModels;
@@ -22,7 +24,8 @@ namespace Modular_Monolith_API.Controllers
         [HttpPost("Add", Name = "AddEmpresaFuncionario")]
         public async Task<IActionResult> AddEmpresaFuncionario(CreateEmpresaFuncionarioViewModel empresaFuncionario)
         {
-            var result = (await _mediator.Send(new AddEmpresaFuncionarioCommand(empresaFuncionario.FuncionarioId, empresaFuncionario.EmpresaId, empresaFuncionario.DataAdmissao, empresaFuncionario.Cargo, empresaFuncionario.Departamento)));
+            var result = (await _mediator.Send(new FuncionarioAdmitidoCommand(empresaFuncionario.FuncionarioId, empresaFuncionario.EmpresaId, empresaFuncionario.DataAdmissao, empresaFuncionario.Cargo, empresaFuncionario.Departamento)));
+
             if (result.IsSuccess)
             {
                 return Ok(result.Value);
@@ -54,10 +57,25 @@ namespace Modular_Monolith_API.Controllers
             }
         }
 
-        [HttpPatch("Update", Name = "UpdateEmpresaFuncionario")]
-        public async Task<IActionResult> UpdateEmpresaFuncionario(UpdateEmpresaFuncionarioViewModel empresaFuncionario)
+        [HttpPatch("AlterarCargoFuncionario", Name = "AlterarCargoFuncionario")]
+        public async Task<IActionResult> AlterarCargoFuncionario(AlterarCargoViewModel empresaFuncionario)
         {
-            var result = (await _mediator.Send(new UpdateEmpresaFuncionarioCommand(empresaFuncionario.Id, empresaFuncionario.DataAdmissao, empresaFuncionario.Cargo, empresaFuncionario.Departamento)));
+            var result = (await _mediator.Send(new CargoAlteradoCommand(empresaFuncionario.Id, empresaFuncionario.Cargo)));
+            if (result.IsSuccess)
+            {
+                return Ok(result.Value);
+            }
+            else
+            {
+                return BadRequest(result?.Error);
+            }
+        }
+
+
+        [HttpPatch("AlterarDepartamentoFuncionario", Name = "AlterarDepartamentoFuncionario")]
+        public async Task<IActionResult> AlterarDepartamentoFuncionario(AlterarDepartamentoViewModel empresaFuncionario)
+        {
+            var result = (await _mediator.Send(new DepartamentoAlteradoCommand(empresaFuncionario.Id, empresaFuncionario.Cargo)));
             if (result.IsSuccess)
             {
                 return Ok(result.Value);

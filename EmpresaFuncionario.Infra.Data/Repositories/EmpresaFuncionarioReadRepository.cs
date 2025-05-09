@@ -1,11 +1,16 @@
-﻿using EmpresasFuncionarios.Domain.Abstractions;
+﻿using Azure.Core;
+using Common.Infra.Data.Abstractions;
+using EmpresasFuncionarios.Domain.Abstractions;
 using EmpresasFuncionarios.Domain.Entities;
+using EmpresasFuncionarios.Domain.Events;
 using EmpresasFuncionarios.Infra.Data.Context;
 using Microsoft.EntityFrameworkCore;
+using SharedKernel;
+using System.Text.Json;
 
 namespace EmpresasFuncionarios.Infra.Data.Repositories
 {
-    public class EmpresaFuncionarioRepository(EmpresaFuncionarioDbContext context) : IEmpresaFuncionarioRepository
+    public class EmpresaFuncionarioReadRepository(EmpresaFuncionarioDbContext context) : IEmpresaFuncionarioReadRepository
     {
         private readonly EmpresaFuncionarioDbContext _context = context;
 
@@ -57,7 +62,23 @@ namespace EmpresasFuncionarios.Infra.Data.Repositories
         {
             return await _context.EmpresasFuncionarios
                 .AsNoTracking()
-                .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+                .Where(e => e.StreamId == id)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<EmpresaFuncionario?> GetByStreamIdAsync(Guid streamId, CancellationToken cancellationToken)
+        {
+            return await _context.EmpresasFuncionarios
+                .AsNoTracking()
+                .Where(e => e.StreamId == streamId)
+                .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        public async Task<List<EmpresaFuncionario>> GetAllAsync(CancellationToken cancellationToken)
+        {
+            return await _context.EmpresasFuncionarios
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
         }
     }
 }

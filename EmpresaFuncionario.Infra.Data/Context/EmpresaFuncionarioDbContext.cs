@@ -11,6 +11,7 @@ namespace EmpresasFuncionarios.Infra.Data.Context
     public class EmpresaFuncionarioDbContext(DbContextOptions options) : DbContext(options)
     {
         public DbSet<EmpresaFuncionario> EmpresasFuncionarios { get; set; }
+        public DbSet<EmpresaFuncionarioEvent> EventosEmpresaFuncionario { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

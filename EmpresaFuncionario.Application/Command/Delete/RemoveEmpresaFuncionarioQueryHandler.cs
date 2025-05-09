@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace EmpresasFuncionarios.Application.Command.Delete
 {
-    public class RemoveEmpresaFuncionarioQueryHandler(IEmpresaFuncionarioService empresaFuncionarioService, IEmpresaFuncionarioRepository empresaFuncionarioRepository) : ICommandHandler<RemoveEmpresaFuncionarioCommand, bool>
+    public class RemoveEmpresaFuncionarioQueryHandler(IEmpresaFuncionarioReadModelService empresaFuncionarioService, IEmpresaFuncionarioReadRepository empresaFuncionarioRepository) : ICommandHandler<RemoveEmpresaFuncionarioCommand, bool>
     {
-        private readonly IEmpresaFuncionarioService _empresaFuncionarioService = empresaFuncionarioService;
-        private readonly IEmpresaFuncionarioRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
+        private readonly IEmpresaFuncionarioReadModelService _empresaFuncionarioService = empresaFuncionarioService;
+        private readonly IEmpresaFuncionarioReadRepository _empresaFuncionarioRepository = empresaFuncionarioRepository;
         public async Task<Result<bool>> Handle(RemoveEmpresaFuncionarioCommand request, CancellationToken cancellationToken)
         {
             var vinculo = await _empresaFuncionarioRepository.GetByIdAsync(request.Id, cancellationToken);

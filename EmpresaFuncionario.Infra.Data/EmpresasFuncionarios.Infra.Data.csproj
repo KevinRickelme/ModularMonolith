@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common.Infra.Data\Common.Infra.Data.csproj" />
     <ProjectReference Include="..\EmpresaFuncionario.Domain\EmpresasFuncionarios.Domain.csproj" />
   </ItemGroup>
 

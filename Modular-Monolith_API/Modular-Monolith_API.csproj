@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <ProjectReference Include="..\Common.Infra.IoC\Common.Infra.IoC.csproj" />
 	  <ProjectReference Include="..\EmpresaFuncionario.Application\EmpresasFuncionarios.Application.csproj" />
 	  <ProjectReference Include="..\EmpresaFuncionario.Infra.Data\EmpresasFuncionarios.Infra.Data.csproj" />
 	  <ProjectReference Include="..\EmpresaFuncionario.Infra.InversionOfControl\EmpresasFuncionarios.Infra.InversionOfControl.csproj" />
