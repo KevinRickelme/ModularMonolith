@@ -51,6 +51,45 @@ Os módulos se comunicam através de **interfaces**, por exemplo:
 
 Esses contratos evitam acoplamento direto entre módulos e permitem que apenas a camada de aplicação dependa de contratos externos.
 
+## 🔄 Atualização de Arquitetura — Event Sourcing no módulo EmpresaFuncionario
+
+### ✅ O que foi feito?
+
+O módulo `EmpresaFuncionario` passou a adotar o padrão **Event Sourcing** para persistência e reconstrução de estado. Em vez de gravar diretamente o estado atual da entidade no banco de dados, agora o sistema **salva eventos imutáveis** que representam mudanças ocorridas ao longo do tempo (ex: `FuncionarioAdmitidoEvent`, `CargoAlteradoEvent`, `DepartamentoAlteradoEvent`).
+
+A entidade `EmpresaFuncionario` agora:
+
+- Aplica mudanças somente através de eventos (`Apply(Event)`).
+- Expõe um método `ReplayEvents(...)` que permite **reidratar** a entidade a partir de seus eventos históricos.
+- Armazena eventos gerados localmente em `_eventos`, para posterior persistência no **Event Store**.
+- Possui métodos de negócio como `Admitir(...)`, `AlterarCargo(...)` e `AlterarDepartamento(...)` que **geram eventos** em vez de alterar diretamente o estado.
+
+Um modelo de leitura (read model / projeção) foi criado para expor os dados atualizados de forma eficiente via API, mantendo a separação entre **Command (escrita)** e **Query (leitura)** conforme os princípios de CQRS.
+
+Além disso, foi criado uma estrutura genérica de Eventos, contendo desde uma classe abstrata, interfaces, até um repositório genérico para eventos, onde possui um método para salvar em uma tabela genérica de eventos e obtê-los através de seu StreamId.
+
+Outra observação é que decidi por separar as tabelas de cada evento de Entidades, logo, os eventos de EmpresaFuncionario ficarão numa tabela chamada EventosEmpresaFuncionario. 
+
+---
+
+### 💡 Por que implementar Event Sourcing aqui?
+
+A modelagem de `EmpresaFuncionario` representa uma **relação rica entre duas entidades (Empresa e Funcionário)**, que pode passar por diversas mudanças ao longo do tempo:
+
+- Troca de departamento
+- Alterações de cargo
+- Reversões de vínculo
+- Auditoria de histórico contratual
+
+Essas mudanças são **sequenciais, rastreáveis e sensíveis ao tempo**, o que torna esse módulo **ideal para Event Sourcing**, pois:
+
+- Permite **rastrear toda a evolução do vínculo** desde sua criação.
+- Facilita **auditorias** e reconstruções de estado em diferentes pontos no tempo.
+- Evita perda de informações sobre alterações históricas.
+- Permite recuperar o estado atual apenas aplicando os eventos.
+- Prepara o sistema para suportar futuros cenários de integração via eventos.
+
+
 ---
 
 ## ✅ Funcionalidades Implementadas
@@ -70,6 +109,7 @@ Esses contratos evitam acoplamento direto entre módulos e permitem que apenas a
 - Suporte a relação rica: data de admissão, cargo, etc.
 - Consulta agregada: `ObterEmpresaComFuncionariosQuery`
 - Usa os serviços de consulta de Empresas e Funcionários para compor a resposta
+
 
 ---
 
