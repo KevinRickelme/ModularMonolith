@@ -32,4 +32,4 @@ jobs:
           Write-Error "Robocopy falhou com código: $exitCode"
           exit $exitCode
         }
-      shell: pwsh
+      shell: powershell
