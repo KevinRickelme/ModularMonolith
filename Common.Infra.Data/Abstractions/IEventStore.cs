@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Common.Infra.Data.Abstractions
 {
-    public interface IEventStore<TDbContext> where TDbContext : DbContext
+    public interface IEventStore<TDbContext> where TDbContext : DbContext 
     {
         Task<Guid> SalvarEventoAsync<T>(T evento) where T : Event;
         Task<List<T>> ObterEventosPorStreamIdAsync<T>(Guid streamId) where T : Event;
