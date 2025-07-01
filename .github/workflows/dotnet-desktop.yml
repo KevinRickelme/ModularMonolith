@@ -1,13 +1,13 @@
-name: Deploy ASP.NET Core to IIS via WinRM
+name: Deploy local com agente GitHub Actions
 
 on:
   push:
-    branches:
-      - main  # ou outra branch que você usa para publicar
+    branches: [ main ]
   workflow_dispatch:
+
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # 👈 importante: define que é no seu PC
 
     steps:
     - name: Checkout código
@@ -16,22 +16,11 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: '8.0.x'  # ajuste conforme sua versão
+        dotnet-version: '8.0.x'
 
     - name: Build e Publish
       run: dotnet publish -c Release -o publish
 
-    - name: Transferir arquivos via PowerShell Remoting (WinRM)
-      uses: gsoft-inc/psremotely@v1.0.0
-      with:
-        host: ${{ secrets.IIS_HOST }}
-        username: ${{ secrets.IIS_USER }}
-        password: ${{ secrets.IIS_PASSWORD }}
-        script: |
-          robocopy "\\?\C:\Users\Public\site-temp" "C:\inetpub\wwwroot\MonolitoModular" /MIR
-
-    - name: Copiar arquivos publicados para pasta remota
+    - name: Deploy com Robocopy
       run: |
-        mkdir -p site-temp
-        cp -r ./publish/* site-temp/
-      shell: bash
+        robocopy publish "C:\inetpub\wwwroot\MonolitoModular" /MIR
