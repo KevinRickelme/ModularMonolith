@@ -1,0 +1,37 @@
+name: Deploy ASP.NET Core to IIS via WinRM
+
+on:
+  push:
+    branches:
+      - main  # ou outra branch que você usa para publicar
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'  # ajuste conforme sua versão
+
+    - name: Build e Publish
+      run: dotnet publish -c Release -o publish
+
+    - name: Transferir arquivos via PowerShell Remoting (WinRM)
+      uses: gsoft-inc/psremotely@v1.0.0
+      with:
+        host: ${{ secrets.IIS_HOST }}
+        username: ${{ secrets.IIS_USER }}
+        password: ${{ secrets.IIS_PASSWORD }}
+        script: |
+          robocopy "\\?\C:\Users\Public\site-temp" "C:\inetpub\wwwroot\MonolitoModular" /MIR
+
+    - name: Copiar arquivos publicados para pasta remota
+      run: |
+        mkdir -p site-temp
+        cp -r ./publish/* site-temp/
+      shell: bash
