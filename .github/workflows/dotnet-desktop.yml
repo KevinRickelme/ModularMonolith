@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main  # ou outra branch que você usa para publicar
-
+  workflow_dispatch:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
