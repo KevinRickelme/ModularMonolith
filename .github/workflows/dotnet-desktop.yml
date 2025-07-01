@@ -1,0 +1,35 @@
+name: Deploy local com agente GitHub Actions
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted  # 👈 importante: define que é no seu PC
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Build e Publish
+      run: dotnet publish ./Modular-monolith_api/Modular-monolith_api.csproj -c Release -o publish
+
+    - name: Deploy com Robocopy (tratando exit code)
+      run: |
+        robocopy publish "C:\inetpub\wwwroot\MonolitoModular" /MIR
+        $exitCode = $LASTEXITCODE
+        if ($exitCode -le 7) {
+          Write-Host "Robocopy finalizou com código de sucesso: $exitCode"
+          exit 0
+        } else {
+          Write-Error "Robocopy falhou com código: $exitCode"
+          exit $exitCode
+        }
+      shell: powershell
